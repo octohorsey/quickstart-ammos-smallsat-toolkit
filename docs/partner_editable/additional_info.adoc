@@ -21,15 +21,6 @@ The Application Load Balancer handles redirection based on the host header in re
 
 For guidance on this process, see your DNS provider's documentation.
 
-=== Create Amazon Cognito user identities
-
-The Application Load Balancer defines an authentication action to protect the AIT, Open MCT, and AIT Sequence Editor applications. To access the applications, you authenticate using an identity that's managed by Amazon Cognito. Create user identities in the Amazon Cognito user pool or set up federation with an existing identity provider.
-
-For more information, see the following:
-
-* https://docs.aws.amazon.com/cognito/latest/developerguide/how-to-create-user-accounts.html[Creating User Accounts as Administrator^]
-* https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-identity-federation.html[Adding User Pool Sign-in Through a Third Party^]
-
 === Adapt AIT to your mission
 
 Adapt AIT for your operation's needs both at launch and as your mission evolves. You can make changes directly on the AIT EC2 instance over an SSH- or SSM-managed session.
@@ -169,7 +160,11 @@ A landing page opens showing links to the AIT, Open MCT, and AIT Sequence Editor
 
 . Choose each link. Verify that each application opens.
 +
-You may be prompted for login credentials the first time you open the applications. Login credentials are managed by Amazon Cognito. For more information, see link:#_create_amazon_cognito_user_identities[Create Amazon Cognito user identities] later in this guide.
+You will be prompted for login credentials the first time you open the applications. Login credentials are managed by Amazon Cognito. These credentials can be seen as an output for the cloud formation stack in the AWS Console for your associated deployment. These outputs can be identified by the following names:
+- Username: `CognitoDefaultUserUsername`
+- Password: `CognitoDefaultUserTempPassword`
+
+Also note, that the Cognito default user will force password change upon first login
 
 === Verify that telemetry is flowing
 The AIT software includes two scripts that generate sample telemetry: `ait-example` and `ait-tlm-simulate`. Verify the telemetry by running both of these command line interface (CLI) programs on the AIT EC2 instance as follows.
