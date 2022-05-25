@@ -21,6 +21,15 @@ The Application Load Balancer handles redirection based on the host header in re
 
 For guidance on this process, see your DNS provider's documentation.
 
+=== Create Amazon Cognito user identities
+
+The Application Load Balancer defines an authentication action to protect the AIT, Open MCT, and AIT Sequence Editor applications. To access the applications, you authenticate using an identity that's managed by Amazon Cognito. Create user identities in the Amazon Cognito user pool or set up federation with an existing identity provider.
+
+For more information, see the following:
+
+* https://docs.aws.amazon.com/cognito/latest/developerguide/how-to-create-user-accounts.html[Creating User Accounts as Administrator^]
+* https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-identity-federation.html[Adding User Pool Sign-in Through a Third Party^]
+
 === Adapt AIT to your mission
 
 Adapt AIT for your operation's needs both at launch and as your mission evolves. You can make changes directly on the AIT EC2 instance over an SSH- or SSM-managed session.
