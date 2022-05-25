@@ -160,7 +160,7 @@ A landing page opens showing links to the AIT, Open MCT, and AIT Sequence Editor
 
 . Choose each link. Verify that each application opens.
 +
-You will be prompted for login credentials the first time you open the applications. Login credentials are managed by Amazon Cognito. These credentials can be seen as an output for the cloud formation stack in the AWS Console for your associated deployment. These outputs can be identified by the following names:
+You will be prompted for login credentials the first time you open the applications. Login credentials are managed by Amazon Cognito. A default user is created as part of the QuickStart and can be used for testing the deployment. These credentials can be found in the outputs of the Main Quickstart CloudFormation stack in the AWS Console for your associated deployment. These outputs can be identified by the following names:
 - Username: `CognitoDefaultUserUsername`
 - Password: `CognitoDefaultUserTempPassword`
 
