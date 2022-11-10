@@ -113,6 +113,10 @@ Metadata:
       AccessSgID:
         default: ID of preconfigured security group in an existing VPC
 Parameters:
+  ConfigFileS3Uri:
+    Type: String
+    Description: S3 URI for the config file produced by the AMMOS Cloud Configurator
+    Default: ''
   AITInstanceType:
     Description: Instance type to be used for AIT. See deployment
       guide for recommendations.
@@ -319,6 +323,7 @@ Conditions:
     - !Not [!Equals [!Ref FQDN, '']]
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
   DeployVpc: !Equals [!Ref VpcId, '']
+  UseConfigurator: !Not [!Equals [!Ref ConfigFileS3Uri, '']]
 Resources:
   # AmmosConfigStack:
   #   Type: AWS::CloudFormation::Stack
@@ -367,6 +372,30 @@ Resources:
         - !Sub ${ProjectName}-ECSTaskExecutionRole
         - !Sub ${ProjectName}-ECSTaskRole
         - !Sub ${ProjectName}-LambdaEfsRole
+  ConfigParser:
+    Type: AWS::Lambda::Function
+    Condition: UseConfigurator
+    Properties:
+      Description: Download and parse the Config Artifact produced by the AMMOS Cloud Configurator
+      FunctionName: !Sub ${ProjectName}-ConfigParser
+      Handler: parse_config.handler
+      MemorySize: 128
+      Role:
+        Fn::ImportValue:
+          !Sub ${ProjectName}-ConfigParserRoleArn
+      Runtime: python3.9
+      Code:
+        S3Bucket: !If
+          - UsingDefaultBucket
+          - !Sub '${QSS3BucketName}-${AWS::Region}'
+          - !Ref QSS3BucketName
+        S3Key: !Sub '${QSS3KeyPrefix}functions/packages/ConfigParser/lambda.zip'
+  Config:
+    Type: AWS::CloudFormation::CustomResource
+    Condition: UseConfigurator
+    Properties:
+      ServiceToken: !GetAtt ConfigParser.Arn
+      ConfigFileS3Uri: !Ref ConfigFileS3Uri
   IamStack:
     Type: AWS::CloudFormation::Stack
     Condition: DeployIam
